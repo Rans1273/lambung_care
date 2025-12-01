@@ -1,68 +1,77 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../utils/theme_manager.dart';
+import '../utils/theme_manager.dart'; // Import theme_manager
 import 'diagnosis_form_screen.dart';
 import 'history_screen.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
 
-  // --- Metode untuk membangun Grafik Diagnosa (Posisi Baru: Atas) ---
+  // --- Metode untuk membangun Grafik Diagnosa (Dinamis Shadow) ---
   Widget _buildDiagnosticGraphic(BuildContext context) {
-    // Menggunakan Padding di bagian luar agar lebih terpisah dari AppBar
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final shadowColor = isDarkMode ? lightShadow : darkShadow;
+    
     return Padding(
       padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 16.0, bottom: 24.0),
-      child: Card(
-        elevation: 0,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        child: Container(
-          padding: const EdgeInsets.all(20),
-          width: double.infinity,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Status Cepat Lambung",
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
-                  ),
-                  const Icon(Icons.shield_outlined, color: Colors.green, size: 28),
-                ],
-              ),
-              const SizedBox(height: 10),
-              
-              // Elemen visual utama: Ilustrasi/Diagram
-              Image.asset(
-                'assets/images/image.png', // Menggunakan logo Anda sebagai ilustrasi
-                height: 80,
-                errorBuilder: (context, error, stackTrace) {
-                  return const Icon(Icons.healing, size: 80, color: Colors.blueAccent);
-                },
-              ),
-              
-              const SizedBox(height: 15),
-              
-              Text(
-                "Akurasi Sistem Pakar: 80% - 100%",
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.greenAccent),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                "Ditenagai oleh Certainty Factor (CF).",
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
-            ],
-          ),
+      // Mengganti Card dengan Container ber-shadow
+      child: Container(
+        padding: const EdgeInsets.all(20),
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: Theme.of(context).cardColor,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: shadowColor,
+              spreadRadius: 1,
+              blurRadius: 10,
+              offset: const Offset(0, 4), // posisi shadow
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Status Cepat Lambung",
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+                ),
+                const Icon(Icons.shield_outlined, color: Colors.green, size: 28),
+              ],
+            ),
+            const SizedBox(height: 10),
+            
+            // Elemen visual utama: Ilustrasi/Diagram
+            Image.asset(
+              'assets/images/image.png', // Menggunakan logo Anda sebagai ilustrasi
+              height: 80,
+              errorBuilder: (context, error, stackTrace) {
+                return const Icon(Icons.healing, size: 80, color: Colors.blueAccent);
+              },
+            ),
+            
+            const SizedBox(height: 15),
+            
+            Text(
+              "Akurasi Sistem Pakar: 80% - 100%",
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.greenAccent),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              "Ditenagai oleh Certainty Factor (CF).",
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+          ],
         ),
       ),
     );
   }
 
-  // --- Metode untuk membangun Header Selamat Datang (Dihapus) ---
-  // Kode asli _buildWelcomeHeader dihapus atau diabaikan.
-  
+  // --- Metode untuk membangun Menu Card (Dinamis Shadow) ---
   Widget _buildMenuCard(
     BuildContext context, {
     required IconData icon,
@@ -70,9 +79,22 @@ class DashboardScreen extends StatelessWidget {
     required String subtitle,
     required VoidCallback onTap,
   }) {
-    return Card(
-      elevation: 0,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final shadowColor = isDarkMode ? lightShadow : darkShadow;
+
+    return Container(
+      decoration: BoxDecoration(
+        color: Theme.of(context).cardColor, // Menggunakan CardColor dari tema
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: shadowColor,
+            spreadRadius: 1,
+            blurRadius: 8,
+            offset: const Offset(0, 3), 
+          ),
+        ],
+      ),
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(16),
@@ -101,6 +123,7 @@ class DashboardScreen extends StatelessWidget {
     );
   }
   
+  // --- Dialog Methods (Tidak Berubah) ---
   void _showAboutDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -148,7 +171,6 @@ class DashboardScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        // Menghapus judul AppBar sesuai permintaan
         title: const Text("", style: TextStyle(fontSize: 20)), 
         actions: [
           // Tombol Theme Switch
@@ -166,7 +188,7 @@ class DashboardScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             
-            // 1. GRAFIK DIAGNOSA ESTETIK (Posisi Baru: Atas)
+            // 1. GRAFIK DIAGNOSA ESTETIK (Posisi Atas)
             _buildDiagnosticGraphic(context),
             
             // 2. Judul Menu
