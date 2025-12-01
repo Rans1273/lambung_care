@@ -17,7 +17,7 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
   void initState() {
     super.initState();
     // Inisialisasi video
-    _controller = VideoPlayerController.asset('assets/Videos/click_pakar.mp4') 
+    _controller = VideoPlayerController.asset('assets/Videos/background.mp4') 
       ..initialize().then((_) {
         setState(() {
           _isInitialized = true;
@@ -39,7 +39,7 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
     return Scaffold(
       body: Stack(
         children: [
-          // Background Video Player
+          // 1. Background Video Player
           if (_isInitialized)
             SizedBox.expand(
               child: FittedBox(
@@ -59,19 +59,36 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
               ),
             ),
 
-          // Overlay Gelap
+          // 2. Overlay Gelap
           Container(
             color: Colors.black.withOpacity(0.6),
           ),
 
-          // Konten Get Started
+          // --- PERUBAHAN DI SINI: FOTO DENGAN ALIGNMENT KE ATAS ---
+          Align(
+            alignment: const Alignment(0.0, -0.2), // Menggeser ke atas (Y: -0.4)
+            child: Image.asset(
+              'assets/images/image.png', 
+              height: 150, 
+              width: 150, 
+            ),
+          ),
+          // --- END PERUBAHAN ---
+
+
+          // 4. Konten Teks dan Tombol (TIDAK BERUBAH POSISI)
           SafeArea(
             child: Padding(
               padding: const EdgeInsets.all(24.0),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  
+                  // Spacer untuk menjaga posisi teks tetap di bawah
+                  const Spacer(), 
+                  
+                  // --- Teks & Tombol (Di bagian bawah) ---
                   Text(
                     "Sistem Pakar\nDiagnosis Dini Penyakit Lambung",
                     style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: Colors.white, fontSize: 32),

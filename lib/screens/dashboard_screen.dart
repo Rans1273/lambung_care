@@ -1,39 +1,157 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../models/models.dart';
-import '../data/data_store.dart';
-import '../logic/expert_system_logic.dart';
 import '../utils/theme_manager.dart';
+import 'diagnosis_form_screen.dart';
+import 'history_screen.dart';
 
-class DashboardScreen extends StatefulWidget {
+class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
 
-  @override
-  State<DashboardScreen> createState() => _DashboardScreenState();
-}
+  // --- Metode untuk membangun Grafik Diagnosa (Posisi Baru: Atas) ---
+  Widget _buildDiagnosticGraphic(BuildContext context) {
+    // Menggunakan Padding di bagian luar agar lebih terpisah dari AppBar
+    return Padding(
+      padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 16.0, bottom: 24.0),
+      child: Card(
+        elevation: 0,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        child: Container(
+          padding: const EdgeInsets.all(20),
+          width: double.infinity,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Status Cepat Lambung",
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+                  ),
+                  const Icon(Icons.shield_outlined, color: Colors.green, size: 28),
+                ],
+              ),
+              const SizedBox(height: 10),
+              
+              // Elemen visual utama: Ilustrasi/Diagram
+              Image.asset(
+                'assets/images/image.png', // Menggunakan logo Anda sebagai ilustrasi
+                height: 80,
+                errorBuilder: (context, error, stackTrace) {
+                  return const Icon(Icons.healing, size: 80, color: Colors.blueAccent);
+                },
+              ),
+              
+              const SizedBox(height: 15),
+              
+              Text(
+                "Akurasi Sistem Pakar: 80% - 100%",
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.greenAccent),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                "Ditenagai oleh Certainty Factor (CF).",
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 
-class _DashboardScreenState extends State<DashboardScreen> {
-  Map<String, double> userAnswers = {};
-
-  @override
-  void initState() {
-    super.initState();
-    // Inisialisasi jawaban default ke 'Tidak' (0.0)
-    for (var symptom in DataStore.symptoms) {
-      userAnswers[symptom.id] = 0.0;
-    }
+  // --- Metode untuk membangun Header Selamat Datang (Dihapus) ---
+  // Kode asli _buildWelcomeHeader dihapus atau diabaikan.
+  
+  Widget _buildMenuCard(
+    BuildContext context, {
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    required VoidCallback onTap,
+  }) {
+    return Card(
+      elevation: 0,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(16),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Icon(icon, size: 36, color: Colors.blueAccent),
+              const SizedBox(height: 10),
+              Text(
+                title,
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+              ),
+              Text(
+                subtitle,
+                style: Theme.of(context).textTheme.bodySmall,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+  
+  void _showAboutDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: Theme.of(context).cardColor,
+        title: const Text("Tentang Aplikasi"),
+        content: const Text(
+          "Aplikasi ini adalah Sistem Pakar Diagnosis Dini Penyakit Lambung (GERD & Gastritis) menggunakan Metode Certainty Factor (CF). \n\nLogika diagnosis didasarkan pada penelitian akademik terkait sistem pakar kesehatan yang terlampir.",
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.of(ctx).pop(), child: const Text("Tutup", style: TextStyle(color: Colors.blueAccent))),
+        ],
+      ),
+    );
+  }
+  
+  void _showPreventionDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: Theme.of(context).cardColor,
+        title: const Text("Tips Pencegahan"),
+        content: const Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text("1. Makanlah dalam porsi kecil namun sering."),
+            Text("2. Hindari makanan pemicu (pedas, asam, berlemak)."),
+            Text("3. Jangan langsung berbaring setelah makan (tunggu 2-3 jam)."),
+            Text("4. Kelola stres dengan baik."),
+            Text("5. Kurangi konsumsi kafein dan alkohol."),
+          ],
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.of(ctx).pop(), child: const Text("Tutup", style: TextStyle(color: Colors.blueAccent))),
+        ],
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    // Akses ThemeManager dan status dark mode
     final themeManager = Provider.of<ThemeManager>(context);
     final isDarkMode = themeManager.themeMode == ThemeMode.dark;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Sistem Pakar Lambung", style: TextStyle(fontSize: 20)),
+        // Menghapus judul AppBar sesuai permintaan
+        title: const Text("", style: TextStyle(fontSize: 20)), 
         actions: [
+          // Tombol Theme Switch
           IconButton(
             icon: Icon(isDarkMode ? Icons.wb_sunny : Icons.nightlight_round),
             tooltip: isDarkMode ? 'Ubah ke Light Mode' : 'Ubah ke Dark Mode',
@@ -43,186 +161,81 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
         ],
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Halo, Pengguna!",
-                  style: Theme.of(context).textTheme.headlineSmall,
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  "Pilih tingkat keyakinan Anda terhadap gejala yang dialami.",
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-                const SizedBox(height: 20),
-                _buildInfoCard(context),
-              ],
-            ),
-          ),
-          // Daftar Gejala
-          Expanded(
-            child: ListView.builder(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-              itemCount: DataStore.symptoms.length,
-              itemBuilder: (context, index) {
-                final symptom = DataStore.symptoms[index];
-                return _buildSymptomCard(context, symptom);
-              },
-            ),
-          ),
-          // Tombol Diagnosa
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: SizedBox(
-              width: double.infinity,
-              height: 56,
-              child: ElevatedButton(
-                onPressed: () {
-                  var results = ExpertSystemLogic.calculate(userAnswers);
-                  _showResultDialog(results);
-                },
-                child: const Text(
-                  "Dapatkan Diagnosa",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
+      body: SingleChildScrollView( 
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            
+            // 1. GRAFIK DIAGNOSA ESTETIK (Posisi Baru: Atas)
+            _buildDiagnosticGraphic(context),
+            
+            // 2. Judul Menu
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Text(
+                "Pilih Menu Layanan",
+                style: Theme.of(context).textTheme.headlineSmall,
               ),
             ),
-          ),
-        ],
-      ),
-    );
-  }
+            const SizedBox(height: 16),
 
-  Widget _buildInfoCard(BuildContext context) {
-    return Card(
-      elevation: 0,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Row(
-          children: [
-            const Icon(Icons.calculate, color: Colors.blueAccent, size: 28),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+            // 3. Grid Menu Tiles
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: GridView.count(
+                crossAxisCount: 2,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                crossAxisSpacing: 16,
+                mainAxisSpacing: 16,
                 children: [
-                  Text("Metode Certainty Factor", style: Theme.of(context).textTheme.titleMedium),
-                  const SizedBox(height: 4),
-                  Text(
-                    "Sistem akan menghitung persentase keyakinan (CF) Anda.",
-                    style: Theme.of(context).textTheme.bodySmall,
+                  _buildMenuCard(
+                    context,
+                    icon: Icons.assignment,
+                    title: "Mulai Diagnosa",
+                    subtitle: "Isi data diri dan gejala untuk diagnosis.",
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => const DiagnosisFormScreen()),
+                      );
+                    },
+                  ),
+                  _buildMenuCard(
+                    context,
+                    icon: Icons.history,
+                    title: "Riwayat",
+                    subtitle: "Lihat hasil diagnosa yang pernah disimpan.",
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => const HistoryScreen()),
+                      );
+                    },
+                  ),
+                  _buildMenuCard(
+                    context,
+                    icon: Icons.info_outline,
+                    title: "Tentang Aplikasi",
+                    subtitle: "Informasi metode dan sumber data.",
+                    onTap: () {
+                      _showAboutDialog(context);
+                    },
+                  ),
+                  _buildMenuCard(
+                    context,
+                    icon: Icons.local_hospital_outlined,
+                    title: "Pencegahan",
+                    subtitle: "Tips menjaga kesehatan lambung.",
+                    onTap: () {
+                      _showPreventionDialog(context);
+                    },
                   ),
                 ],
               ),
             ),
+            // Padding bawah agar tidak terlalu mepet
+            const SizedBox(height: 30), 
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildSymptomCard(BuildContext context, Symptom symptom) {
-    return Card(
-      margin: const EdgeInsets.symmetric(vertical: 8.0),
-      elevation: 0,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              symptom.name,
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 12),
-            // Menggunakan DropdownButtonFormField untuk input CF User
-            DropdownButtonFormField<double>(
-              value: userAnswers[symptom.id],
-              decoration: InputDecoration(
-                fillColor: Theme.of(context).cardColor,
-                filled: true,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide.none,
-                ),
-                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              ),
-              hint: Text("Pilih tingkat keyakinan", style: Theme.of(context).textTheme.bodyMedium),
-              items: DataStore.choices.map((UserChoice choice) {
-                return DropdownMenuItem<double>(
-                  value: choice.value,
-                  child: Text(choice.label, style: Theme.of(context).textTheme.bodyMedium),
-                );
-              }).toList(),
-              onChanged: (value) {
-                setState(() {
-                  if (value != null) {
-                    userAnswers[symptom.id] = value;
-                  }
-                });
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  void _showResultDialog(List<DiagnosisResult> results) {
-    final topResult = results.first;
-
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: Theme.of(context).cardColor,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: Text("Hasil Diagnosa", style: Theme.of(context).textTheme.titleLarge),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "Penyakit: ${topResult.disease.name}",
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Colors.blueAccent),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              "Tingkat Keyakinan: ${topResult.percentage.toStringAsFixed(2)}%",
-              style: Theme.of(context).textTheme.bodyLarge,
-            ),
-            const Divider(height: 24),
-            Text("Saran Penanganan:", style: Theme.of(context).textTheme.titleSmall),
-            const SizedBox(height: 4),
-            Text(
-              topResult.disease.solution,
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-            if (results.length > 1) ...[
-              const SizedBox(height: 20),
-              Text(
-                "Kemungkinan Lain:",
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(fontStyle: FontStyle.italic),
-              ),
-              ...results.skip(1).map((e) => Text(
-                "- ${e.disease.name}: ${e.percentage.toStringAsFixed(2)}%",
-                style: Theme.of(context).textTheme.bodySmall,
-              )),
-            ],
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(),
-            child: const Text("Tutup", style: TextStyle(color: Colors.blueAccent)),
-          )
-        ],
       ),
     );
   }
