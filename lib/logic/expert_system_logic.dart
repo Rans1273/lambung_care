@@ -44,7 +44,7 @@ class ExpertSystemLogic {
       results.add(DiagnosisResult(disease, cfCombine * 100));
     }
 
-    // Urutkan dari persentase tertinggi
+    // Urutkan dari persentase tertinggi //
     results.sort((a, b) => b.percentage.compareTo(a.percentage));
     return results;
   }
