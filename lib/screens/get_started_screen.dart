@@ -61,7 +61,8 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
 
           // 2. Overlay Gelap
           Container(
-            color: Colors.black.withOpacity(0.6),
+            // FIX: Mengganti withOpacity
+            color: const Color.fromRGBO(0, 0, 0, 0.6),
           ),
 
           // --- PERUBAHAN DI SINI: FOTO DENGAN ALIGNMENT KE ATAS ---

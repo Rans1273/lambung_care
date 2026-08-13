@@ -20,7 +20,6 @@ final ThemeData darkTheme = ThemeData(
   brightness: Brightness.dark,
   scaffoldBackgroundColor: const Color(0xFF1E1E1E), 
   cardColor: const Color(0xFF2C2C2C), 
-  // Tambahkan shadow color ke skema warna kustom (jika Anda menggunakan ekstensi tema, tapi di sini kita pakai Box Shadow)
   
   appBarTheme: const AppBarTheme(
     backgroundColor: Colors.transparent,
@@ -56,7 +55,8 @@ final ThemeData darkTheme = ThemeData(
       ),
     ),
     menuStyle: MenuStyle(
-      backgroundColor: MaterialStateProperty.all(const Color(0xFF2C2C2C)),
+      // FIX: Mengganti MaterialStateProperty
+      backgroundColor: WidgetStateProperty.all(const Color(0xFF2C2C2C)),
     ),
   ),
   canvasColor: const Color(0xFF2C2C2C), 
@@ -101,7 +101,8 @@ final ThemeData lightTheme = ThemeData(
       ),
     ),
     menuStyle: MenuStyle(
-      backgroundColor: MaterialStateProperty.all(Colors.white),
+      // FIX: Mengganti MaterialStateProperty
+      backgroundColor: WidgetStateProperty.all(Colors.white),
     ),
   ),
   canvasColor: Colors.white,

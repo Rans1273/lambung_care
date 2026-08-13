@@ -120,7 +120,8 @@ class _DiagnosisFormScreenState extends State<DiagnosisFormScreen> {
                   Text("Gejala yang Dialami", style: Theme.of(context).textTheme.headlineSmall),
                   Text("Tentukan tingkat keyakinan Anda terhadap setiap gejala.", style: Theme.of(context).textTheme.bodyMedium),
                   const Divider(),
-                  ...DataStore.symptoms.map((symptom) => _buildSymptomCard(context, symptom)).toList(),
+                  // FIX: Menghapus .toList() yang tidak perlu
+                  ...DataStore.symptoms.map((symptom) => _buildSymptomCard(context, symptom)),
                 ],
               ),
             ),
@@ -167,7 +168,8 @@ class _DiagnosisFormScreenState extends State<DiagnosisFormScreen> {
             const SizedBox(height: 12),
             DropdownButtonFormField<String>(
               decoration: const InputDecoration(labelText: 'Jenis Kelamin'),
-              value: _gender,
+              // FIX: Menggunakan initialValue menggantikan value
+              initialValue: _gender, 
               items: ['Laki-laki', 'Perempuan'].map((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
@@ -216,7 +218,8 @@ class _DiagnosisFormScreenState extends State<DiagnosisFormScreen> {
             ),
             const SizedBox(height: 12),
             DropdownButtonFormField<double>(
-              value: userAnswers[symptom.id],
+              // FIX: Menggunakan initialValue menggantikan value
+              initialValue: userAnswers[symptom.id], 
               decoration: InputDecoration(
                 fillColor: Theme.of(context).cardColor,
                 filled: true,
@@ -262,7 +265,8 @@ class _DiagnosisFormScreenState extends State<DiagnosisFormScreen> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Pasien: ${_nameController.text} (${age} th)"),
+              // FIX: Menghapus kurung kurawal yang tidak perlu
+              Text("Pasien: ${_nameController.text} ($age th)"),
               const Divider(height: 16),
               Text(
                 "Diagnosa Utama:",

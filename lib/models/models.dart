@@ -1,5 +1,3 @@
-import 'dart:convert'; // Diperlukan untuk jsonEncode/jsonDecode di HistoryService
-
 // 1. Model Penyakit
 class Disease {
   final String id;

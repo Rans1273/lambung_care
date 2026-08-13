@@ -1,7 +1,7 @@
 import '../models/models.dart';
 
 class DataStore {
-  // Pilihan keyakinan user (CF User) berdasarkan Tabel 1 Sumber 1 dan 2
+  // Pilihan keyakinan user (CF User)
   static List<UserChoice> choices = [
     UserChoice("Tidak", 0.0),
     UserChoice("Tidak Tahu", 0.2),
@@ -26,7 +26,7 @@ class DataStore {
     Symptom(id: 'G29', name: 'Asam lambung naik'),
   ];
 
-  // Aturan & Bobot Pakar (CF Pakar) - Menggunakan contoh dari Tabel 4, Sumber 1
+  // Aturan & Bobot Pakar (CF Pakar)
   static List<Rule> rules = [
     // Rules untuk Gastritis (P01)
     Rule(diseaseId: 'P01', symptomId: 'G01', expertWeight: 1.0),
@@ -40,7 +40,7 @@ class DataStore {
     Rule(diseaseId: 'P02', symptomId: 'G02', expertWeight: 0.4), 
     Rule(diseaseId: 'P02', symptomId: 'G03', expertWeight: 0.4), 
     Rule(diseaseId: 'P02', symptomId: 'G05', expertWeight: 1.0),
-    Rule(diseaseId: 'P02', symptomId: 'G14', expertWeight: 1.0), // Gejala Kunci GERD
+    Rule(diseaseId: 'P02', symptomId: 'G14', expertWeight: 1.0),
     Rule(diseaseId: 'P02', symptomId: 'G16', expertWeight: 0.8), 
     Rule(diseaseId: 'P02', symptomId: 'G29', expertWeight: 1.0),
   ];
